@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "_default": {
+            "link": "rollup"
+        }, 
+        "rollup": {
+            "applicationId": "iRhuMynzFGvVyiSsGXnKU6GU5of4tVE62GHW8xGi", 
+            "masterKey": "dFdjq4h8iyoxtDDw9x22dzJxvvtFNfQRI58VAji7"
+        }
+    }
+}
