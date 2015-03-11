@@ -5,6 +5,10 @@
  * @param  {Object}  response  response object
  * @return {undefined}           undefined
  */
+
+///////////////
+//VALIDATION //
+///////////////
 Parse.Cloud.afterSave(Parse.User, function (request, response) {
   if(request.object.isNew()) {
     var validUserRoleQuery = new Parse.Query(Parse.Role);

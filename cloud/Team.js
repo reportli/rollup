@@ -5,8 +5,9 @@ var Permissions = require('cloud/utils/Permissions.js'),
     TypeUtils = require('cloud/utils/TypeUtils.js'),
     Parser = require('cloud/utils/Parser.js'),
 
-    _cache = {},
-
+    //////////////
+    //CONSTANTS //
+    //////////////
     _classes = {
       TEAM: 'Team'
     },
@@ -16,13 +17,38 @@ var Permissions = require('cloud/utils/Permissions.js'),
       MEMBERS: 'members'
     };
 
+    //////////
+    //CACHE //
+    //////////
+    _cache = {},
+
+///////////////
+//VALIDATION //
+///////////////
 Parse.Cloud.beforeSave(_classes.TEAM, function (request, response) {
+  var relationQuery = request.object.relation(_properties.MEMBERS).query();
   if(request.object.isNew()) {
    Permissions.setUserAsOwner(request.user, request.object);
   }
-  response.success();
+  relationQuery.find().then(function(results){
+    if(results.length > 0) {
+      response.success();
+    } else {
+      response.error()
+    }
+  });
 });
 
+// Parse.Cloud.define("createTeam", function(request, resposne){
+//   var newTeam = Parse.Object.extend(_classes.TEAM);
+// });
+
+/**
+ * Gets team information
+ * @param  {[type]} request   [description]
+ * @param  {Parse}  response) {             var teamQuery [description]
+ * @return {[type]}           [description]
+ */
 Parse.Cloud.define("getTeamInfo", function (request, response) {
   var teamQuery = new Parse.Query(_classes.TEAM);
   teamQuery.equalTo(_properties.NAME, request.params.team);
@@ -31,6 +57,13 @@ Parse.Cloud.define("getTeamInfo", function (request, response) {
   });
 });
 
+/**
+ * Adds members to a team
+ * @param  {Object} request      request object
+ * @param  {String} request.params.team  Team name
+ * @param  {String} request.params.members  String containing user mentions ('@jasonbelmonti')
+ * @return {undefined}           [undefined]
+ */
 Parse.Cloud.define("addMembersToTeam", function(request, response){
   var newMembers = Parser.parseUserNames(request.params.members),
       teamQuery = new Parse.Query(_classes.TEAM),
@@ -43,18 +76,22 @@ Parse.Cloud.define("addMembersToTeam", function(request, response){
     team: {}
   };
 
-  resolutions = [resolveTeam(request.params.name), resolveUsers(newMembers)];
+  resolutions = [resolveTeam(request.params.team), resolveUsers(newMembers)];
 
-  Parse.Promise.when(resolutions).then(function(result){
-    console.log(_cache);
+  Parse.Promise.when(resolutions).then(function(){
     var relation = _cache.team.relation(_properties.MEMBERS);
     _cache.users.forEach(function(user){
       relation.add(user);
     })
-    _cache.team.save();
+    return _cache.team.save();
   });
 });
 
+/**
+ * Resolves a team name to a Team object
+ * @param  {String} teamName A team name
+ * @return {Parse.Promise}           Promise that resolves when the team lookup has completed
+ */
 function resolveTeam (teamName) {
   var teamQuery = new Parse.Query(_classes.TEAM),
       teamLookup = new Parse.Promise();
@@ -69,6 +106,12 @@ function resolveTeam (teamName) {
 //This should be moved to a users module
 //and should accept a callback as an argument that
 //is passed the lookup results. or something.
+
+/**
+ * Resolves an array of user mentions to Parse User objects
+ * @param  {Array} userNames An array of user names
+ * @return {Parse.Promise}           Promise that resolves when all users lookups have completed
+ */
 function resolveUsers (userNames) {
   var userLookups = [];
 
