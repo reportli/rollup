@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseURL</key>
+	<string>https://api.parse.com/1/classes/User</string>
+	<key>followRedirect</key>
+	<true/>
+	<key>handleJSONPCallbacks</key>
+	<false/>
+	<key>headers</key>
+	<array>
+		<dict>
+			<key>header</key>
+			<string>X-Parse-Application-Id</string>
+			<key>inUse</key>
+			<true/>
+			<key>value</key>
+			<string>AQ2JzJBrqkne4KsZ3o4XYdG7bHlGPD9rWkepienY</string>
+		</dict>
+		<dict>
+			<key>header</key>
+			<string>X-Parse-REST-API-Key</string>
+			<key>inUse</key>
+			<true/>
+			<key>value</key>
+			<string>QMwkV7xFr9RGvrMz6ac8fodgnVYVuiEPbt6KbkbV</string>
+		</dict>
+	</array>
+	<key>httpMethod</key>
+	<string>POST</string>
+	<key>jsonpScript</key>
+	<string></string>
+	<key>paramBodyUIChoice</key>
+	<integer>0</integer>
+	<key>parameters</key>
+	<array>
+		<dict>
+			<key>inUse</key>
+			<true/>
+			<key>parameter</key>
+			<string>username</string>
+			<key>value</key>
+			<string>jasonbelmonti</string>
+		</dict>
+		<dict>
+			<key>inUse</key>
+			<true/>
+			<key>parameter</key>
+			<string>password</string>
+			<key>value</key>
+			<string>bear1002</string>
+		</dict>
+	</array>
+	<key>parametersType</key>
+	<integer>1</integer>
+	<key>presentBeforeChallenge</key>
+	<false/>
+	<key>stringEncoding</key>
+	<integer>4</integer>
+	<key>usingHTTPBody</key>
+	<false/>
+</dict>
+</plist>
