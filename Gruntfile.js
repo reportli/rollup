@@ -41,6 +41,15 @@ module.exports = function (grunt) {
     uglify: {
     },
 
+    jsdoc : {
+      cloud : {
+        src: ['<%= pkg.directories.cloud %>'],
+        options: {
+            destination: '<%= pkg.directories.docs %>/<%= pkg.directories.cloud %>'
+        }
+      }
+    },
+
     jshint: {
       options: {
         curly: true,
@@ -83,7 +92,8 @@ module.exports = function (grunt) {
 
     clean: {
       dist: ['<%= pkg.directories.dist %>'],
-      tmp: ['<%= pkg.directories.tmp %>']
+      tmp: ['<%= pkg.directories.tmp %>'],
+      docs: ['<%= pkg.directories.docs %>']
     },
 
     copy: {
@@ -121,7 +131,9 @@ module.exports = function (grunt) {
 
   // Third-party plugins
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-jsdoc');
 
+  grunt.registerTask('docs', ['clean:docs', 'jsdoc:cloud'])
   grunt.registerTask('deploy', ['shell:deploy']);
   grunt.registerTask('default', ['clean', 'copy:temp']);
 };

@@ -15,6 +15,7 @@
   "directories": {
     "dist": "dist",
     "app": "app",
+    "docs": "docs",
     "sass": "app/styles",
     "cloud": "cloud",
     "source": "app",
@@ -50,6 +51,7 @@
     "grunt-contrib-watch": "~0.6.1",
     "grunt-exec": "~0.4.2",
     "grunt-express-server": "~0.4.1",
+    "grunt-jsdoc": "^0.5.8",
     "grunt-mocha": "~0.3.1",
     "grunt-open": "~0.2.0",
     "grunt-requirejs": "~0.4.0",

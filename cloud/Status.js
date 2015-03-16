@@ -64,6 +64,22 @@ Parse.Cloud.beforeSave("Status", function(request, response) {
   }
 });
 
+Parse.Cloud.afterSave("Status", function(request) {
+  var status = request.object,
+      saves = [];
+  var mentionsRelation = status.relation(_properties.MENTIONS);
+  mentionsRelation.query().find().then(function (mentionedUsers) {
+    mentionedUsers.forEach(function(user) {
+      var relation = user.relation(_properties.MENTIONS);
+      if(user.get(_properties.USER_NAME) !== Parse.User.current().get(_properties.USER_NAME)) {
+        relation.add(status);
+        Parse.Cloud.useMasterKey();
+        user.save();
+      }
+    });
+  });
+});
+
 /**
  * Searches status content looking for recognized conjugations of valid keywords
  * @param  {Status} status the status object to parse
@@ -106,9 +122,13 @@ function parseMentions (status) {
     Parser.parseUserNamesFromMentions(mentions).forEach(function (userName) {
       var userQuery = new Parse.Query(Parse.User);
       userQuery.equalTo(_properties.USER_NAME, userName);
-      mentionsPromises.push(userQuery.find({
-        success: function (mentionedUser) {
-          if(mentionedUser.length !== 0) {
+      mentionsPromises.push(userQuery.first().then(
+        function (mentionedUser) {
+          if(mentionedUser) {
+            if(!_requestCache.knownUsers) {
+              _requestCache.knownUsers = [];
+            }
+            _requestCache.knownUsers.push(mentionedUser);
             mentionsRelation.add(mentionedUser);
           } else {
             if(!_requestCache.unknownUsers) {
@@ -118,7 +138,7 @@ function parseMentions (status) {
           }
         }
         //Handle unknown users here
-      }));
+      ));
     });
   }
 

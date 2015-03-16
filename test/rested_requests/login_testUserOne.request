@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>baseURL</key>
-	<string>https://api.parse.com/1/classes/Status</string>
+	<string>https://api.parse.com/1/login</string>
 	<key>followRedirect</key>
 	<true/>
 	<key>handleJSONPCallbacks</key>
@@ -20,14 +20,6 @@
 		</dict>
 		<dict>
 			<key>header</key>
-			<string>X-Parse-Session-Token</string>
-			<key>inUse</key>
-			<true/>
-			<key>value</key>
-			<string>5Ek7j7UtEAxFduXSejNaxXilg</string>
-		</dict>
-		<dict>
-			<key>header</key>
 			<string>X-Parse-REST-API-Key</string>
 			<key>inUse</key>
 			<true/>
@@ -36,7 +28,7 @@
 		</dict>
 	</array>
 	<key>httpMethod</key>
-	<string>POST</string>
+	<string>GET</string>
 	<key>jsonpScript</key>
 	<string></string>
 	<key>paramBodyUIChoice</key>
@@ -47,13 +39,21 @@
 			<key>inUse</key>
 			<true/>
 			<key>parameter</key>
-			<string>contents</string>
+			<string>username</string>
 			<key>value</key>
-			<string>I started a great project with @shaneafsar</string>
+			<string>testUserOne</string>
+		</dict>
+		<dict>
+			<key>inUse</key>
+			<true/>
+			<key>parameter</key>
+			<string>password</string>
+			<key>value</key>
+			<string>InDay1002</string>
 		</dict>
 	</array>
 	<key>parametersType</key>
-	<integer>1</integer>
+	<integer>0</integer>
 	<key>presentBeforeChallenge</key>
 	<false/>
 	<key>stringEncoding</key>
