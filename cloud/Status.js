@@ -63,3 +63,84 @@ Parse.Cloud.beforeSave("Status", function(request, response) {
     });
   }
 });
+
+Parse.Cloud.afterSave("Status", function(request) {
+  var status = request.object,
+      saves = [];
+  var mentionsRelation = status.relation(_properties.MENTIONS);
+  mentionsRelation.query().find().then(function (mentionedUsers) {
+    mentionedUsers.forEach(function(user) {
+      var relation = user.relation(_properties.MENTIONS);
+      if(user.get(_properties.USER_NAME) !== Parse.User.current().get(_properties.USER_NAME)) {
+        relation.add(status);
+        Parse.Cloud.useMasterKey();
+        user.save();
+      }
+    });
+  });
+});
+
+/**
+ * Searches status content looking for recognized conjugations of valid keywords
+ * @param  {Status} status the status object to parse
+ * @return {Parse.Promise}        a promise that resolves once keywords have been retrieved
+ */
+function parseKeywords (status) {
+  var contents = status.get(_properties.CONTENTS),
+      tokenizedContents = contents.split(' '),
+      keywordQuery = new Parse.Query(_classes.KEYWORD),
+      keywordPromise = new Parse.Promise();
+
+  return keywordQuery.find().then(function (keywords) {
+    var matchedKeywords = [];
+    keywords.forEach(function (keyword) {
+      keyword.get(_properties.CONJUGATIONS).forEach(function (conjugation) {
+        tokenizedContents.forEach(function (token) {
+          if(token.toLowerCase() === conjugation.toLowerCase()) {
+            status.addUnique(_properties.KEYWORDS, keyword);
+          }
+        });
+      });
+    });
+  });
+}
+
+/**
+ * Searches status content looking for mentions of other usernames that being with a '@' symbol
+ * @param  {Status} status the status object to parse
+ * @return {Parse.Promise}        a promise that resolves when all '@' mentions have been resolved to users
+ */
+function parseMentions (status) {
+  var contents = status.get(_properties.CONTENTS),
+      userNames =[],
+      mentions = Parser.parseMentions(contents),
+      mentionsRelation = status.relation(_properties.MENTIONS),
+      mentionsPromises = [];
+
+  if(mentions) {
+    //This user lookup functionality should be broken off into its own module
+    Parser.parseUserNamesFromMentions(mentions).forEach(function (userName) {
+      var userQuery = new Parse.Query(Parse.User);
+      userQuery.equalTo(_properties.USER_NAME, userName);
+      mentionsPromises.push(userQuery.first().then(
+        function (mentionedUser) {
+          if(mentionedUser) {
+            if(!_requestCache.knownUsers) {
+              _requestCache.knownUsers = [];
+            }
+            _requestCache.knownUsers.push(mentionedUser);
+            mentionsRelation.add(mentionedUser);
+          } else {
+            if(!_requestCache.unknownUsers) {
+              _requestCache.unknownUsers = [];
+            }
+            _requestCache.unknownUsers.push(userName);
+          }
+        }
+        //Handle unknown users here
+      ));
+    });
+  }
+
+  return Parse.Promise.when(mentionsPromises);
+}

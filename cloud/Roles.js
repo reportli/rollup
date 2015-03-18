@@ -1,25 +1,31 @@
+
+var _roles = {
+      VALID_USER_ROLE: 'validUser'
+    },
+    _properties = {
+      NAME: 'name',
+      USERNAME: 'username'
+    };
+
+
 /**
  * Adds users to the generic 'valid user' role immediately after creation.
  * This should only be performed on new users.
- * @param  {Object} request   request object (contains user that was just saved as 'request.object')
- * @param  {Object}  response  response object
- * @return {undefined}           undefined
  */
+Parse.Cloud.afterSave(Parse.User, function (request) {
+  var user = request.object,
+      validUserRoleQuery = new Parse.Query(Parse.Role);
 
-///////////////
-//VALIDATION //
-///////////////
-Parse.Cloud.afterSave(Parse.User, function (request, response) {
-  if(request.object.isNew()) {
-    var validUserRoleQuery = new Parse.Query(Parse.Role);
-    validUserRoleQuery.equalTo('name', 'validUser');
-    validUserRoleQuery.first(function (validUserRole) {
-      validUserRole.getUsers().add(request.object);
-      return validUserRole.save();
-    }).then(function (savedRole) {
-      response.success();
-    });
-  } else {
-    response.success();
-  }
+  validUserRoleQuery.equalTo(_properties.NAME, _roles.VALID_USER_ROLE);
+  validUserRoleQuery.first().then(function (validUserRole) {
+    var validUsersRelation = validUserRole.getUsers();
+    var validUsersQuery = validUsersRelation.query();
+    validUsersQuery.equalTo(_properties.USERNAME, user.get(_properties.USERNAME));
+    validUsersQuery.find().then(function (results){
+      if(results.length === 0) {
+        validUsersRelation.add(user);
+        validUserRole.save();
+      }
+    })
+  });
 });

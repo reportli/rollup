@@ -4,6 +4,7 @@
 var Permissions = require('cloud/utils/Permissions.js'),
     TypeUtils = require('cloud/utils/TypeUtils.js'),
     Parser = require('cloud/utils/Parser.js'),
+    Users = require('cloud/Users.js'),
 
     //////////////
     //CONSTANTS //
@@ -14,7 +15,8 @@ var Permissions = require('cloud/utils/Permissions.js'),
     _properties = {
       NAME: 'name',
       USERNAME: 'username',
-      MEMBERS: 'members'
+      MEMBERS: 'members',
+      TEAMS: 'teams'
     };
 
     //////////
@@ -50,11 +52,20 @@ Parse.Cloud.beforeSave(_classes.TEAM, function (request, response) {
  * @return {[type]}           [description]
  */
 Parse.Cloud.define("getTeamInfo", function (request, response) {
-  var teamQuery = new Parse.Query(_classes.TEAM);
-  teamQuery.equalTo(_properties.NAME, request.params.team);
-  teamQuery.find(function(team) {
-    response.success(team);
+  var lookups = [resolveTeam(request.params.team)];
+  _cache = {
+    members: [],
+    team: {}
+  };
+
+  resolveTeam(request.params.team).then(function(){
+    var membersRelation = _cache.team.relation(_properties.MEMBERS);
+    membersRelation.query().find().then(function(members) {
+      _cache.members = members;
+      response.success(_cache);
+    });
   });
+  
 });
 
 /**
@@ -76,14 +87,24 @@ Parse.Cloud.define("addMembersToTeam", function(request, response){
     team: {}
   };
 
-  resolutions = [resolveTeam(request.params.team), resolveUsers(newMembers)];
+  resolutions = [resolveTeam(request.params.team), Users.resolveUserNames(newMembers, _cache)];
 
-  Parse.Promise.when(resolutions).then(function(){
+  Parse.Promise.when(resolutions).then(function(result){
     var relation = _cache.team.relation(_properties.MEMBERS);
     _cache.users.forEach(function(user){
       relation.add(user);
+    });
+    _cache.team.save().then(function () {
+      var lookups = [];
+      _cache.users.forEach(function (user) {
+        user.relation(_properties.TEAMS).add(_cache.team);
+        Parse.Cloud.useMasterKey();
+        lookups.push(user.save());
+      });
+      return Parse.Promise.when(lookups);
+    }).then(function () {
+      response.success();
     })
-    return _cache.team.save();
   });
 });
 
@@ -103,24 +124,3 @@ function resolveTeam (teamName) {
   return teamLookup;
 }
 
-//This should be moved to a users module
-//and should accept a callback as an argument that
-//is passed the lookup results. or something.
-
-/**
- * Resolves an array of user mentions to Parse User objects
- * @param  {Array} userNames An array of user names
- * @return {Parse.Promise}           Promise that resolves when all users lookups have completed
- */
-function resolveUsers (userNames) {
-  var userLookups = [];
-
-  userNames.forEach(function (userName) {
-    var userQuery = new Parse.Query(Parse.User);
-    userQuery.equalTo(_properties.USERNAME, userName);
-    userLookups.push(userQuery.first(function (user) {
-      _cache.users.push(user);
-    }));
-  });
-  return new Parse.Promise.when(userLookups);
-}

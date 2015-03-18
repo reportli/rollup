@@ -47,9 +47,17 @@
 			<key>inUse</key>
 			<true/>
 			<key>parameter</key>
-			<string>contents</string>
+			<string>members</string>
 			<key>value</key>
-			<string>I done that tight project</string>
+			<string>@jasonbelmonti @shaneafsar</string>
+		</dict>
+		<dict>
+			<key>inUse</key>
+			<true/>
+			<key>parameter</key>
+			<string>team</string>
+			<key>value</key>
+			<string>alpha</string>
 		</dict>
 	</array>
 	<key>parametersType</key>
