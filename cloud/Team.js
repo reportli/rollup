@@ -17,33 +17,20 @@ var Permissions = require('cloud/utils/Permissions.js'),
       USERNAME: 'username',
       MEMBERS: 'members',
       TEAMS: 'teams'
+    },
+
+    /////////////////////
+    //DEFAULT SETTINGS //
+    /////////////////////
+    _defaultSettings = {
+
     };
 
-    //////////
-    //CACHE //
-    //////////
-    _cache = {},
-
-///////////////
-//VALIDATION //
-///////////////
-Parse.Cloud.beforeSave(_classes.TEAM, function (request, response) {
-  var relationQuery = request.object.relation(_properties.MEMBERS).query();
-  if(request.object.isNew()) {
-   Permissions.setUserAsOwner(request.user, request.object);
-  }
-  relationQuery.find().then(function(results){
-    if(results.length > 0) {
-      response.success();
-    } else {
-      response.error()
-    }
-  });
+Parse.Cloud.define("createTeam", function(request, resposne){
+  var newTeam = Parse.Object.extend(_classes.TEAM);
+  newTeam.set(_properties.NAME, request.params.name);
+  newTeam.save();
 });
-
-// Parse.Cloud.define("createTeam", function(request, resposne){
-//   var newTeam = Parse.Object.extend(_classes.TEAM);
-// });
 
 /**
  * Gets team information
@@ -52,20 +39,20 @@ Parse.Cloud.beforeSave(_classes.TEAM, function (request, response) {
  * @return {[type]}           [description]
  */
 Parse.Cloud.define("getTeamInfo", function (request, response) {
-  var lookups = [resolveTeam(request.params.team)];
-  _cache = {
+  var teamInfo = {
     members: [],
     team: {}
   };
 
-  resolveTeam(request.params.team).then(function(){
-    var membersRelation = _cache.team.relation(_properties.MEMBERS);
+  resolveTeam(request.params.team).then(function(team){
+    var membersRelation = team.relation(_properties.MEMBERS);
+    teamInfo.team = team;
     membersRelation.query().find().then(function(members) {
-      _cache.members = members;
-      response.success(_cache);
+      teamInfo.members = members;
+      response.success(teamInfo);
     });
   });
-  
+
 });
 
 /**
@@ -82,22 +69,17 @@ Parse.Cloud.define("addMembersToTeam", function(request, response){
       resolutions,
       unresolvedUsers =[];
 
-  _cache = {
-    users: [],
-    team: {}
-  };
+  resolutions = [resolveTeam(request.params.team), Users.resolveUserNames(newMembers)];
 
-  resolutions = [resolveTeam(request.params.team), Users.resolveUserNames(newMembers, _cache)];
-
-  Parse.Promise.when(resolutions).then(function(result){
-    var relation = _cache.team.relation(_properties.MEMBERS);
-    _cache.users.forEach(function(user){
+  Parse.Promise.when(resolutions).then(function(team, users){
+    var relation = team.relation(_properties.MEMBERS);
+    users.forEach(function(user){
       relation.add(user);
     });
-    _cache.team.save().then(function () {
+    team.save().then(function () {
       var lookups = [];
-      _cache.users.forEach(function (user) {
-        user.relation(_properties.TEAMS).add(_cache.team);
+      users.forEach(function (user) {
+        user.relation(_properties.TEAMS).add(team);
         Parse.Cloud.useMasterKey();
         lookups.push(user.save());
       });
@@ -105,6 +87,30 @@ Parse.Cloud.define("addMembersToTeam", function(request, response){
     }).then(function () {
       response.success();
     })
+  });
+});
+
+Parse.Cloud.define("inviteMemberToTeam", function(request, response) {
+  resolveTeam(request.params.team).then(function(){
+  })
+});
+
+
+/**
+ * Joins current user to team
+ * @param  {String} team A team name
+ */
+Parse.Cloud.define("joinTeam", function(request, response) {
+  resolveTeam(request.params.team).then(function(team){
+    if(team.get('private') === true) {
+      response.error('You must have an invite to join this team');
+    }else{
+      var membersRelation = team.relation("members");
+      membersRelation.add(Parse.User.current());
+      team.save().then(function(){
+        response.success('Joined successfully');
+      });
+    }
   });
 });
 
@@ -118,8 +124,7 @@ function resolveTeam (teamName) {
       teamLookup = new Parse.Promise();
   teamQuery.equalTo(_properties.NAME, teamName);
   teamQuery.first(function (team) {
-    _cache.team = team;
-    teamLookup.resolve();
+    teamLookup.resolve(team);
   });
   return teamLookup;
 }

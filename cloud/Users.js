@@ -23,14 +23,18 @@ var Permissions = require('cloud/utils/Permissions.js'),
  * @return {Parse.Promise}           A promise that resolves when all user lookups have been completed
  */
 exports.resolveUserNames = function (userNames, _cache) {
-  var userLookups = [];
+  var userLookups = [],
+      lookup = new Parse.Promise();
 
   userNames.forEach(function (userName) {
     var userQuery = new Parse.Query(Parse.User);
     userQuery.equalTo(_properties.USERNAME, userName);
-    userLookups.push(userQuery.first(function (user) {
-      _cache.users.push(user);
-    }));
+    userLookups.push(userQuery.first());
   });
-  return new Parse.Promise.when(userLookups);
+
+  Parse.Promise.when(userLookups).then(function(){
+    lookup.resolve(Array.prototype.slice.call(arguments));
+  });
+
+  return lookup;
 }
