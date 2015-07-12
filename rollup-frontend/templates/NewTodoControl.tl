@@ -1,0 +1,1 @@
+<input class="new-todo-control" type="text" name="new-todo" value="" placeholder="Remember to ...">

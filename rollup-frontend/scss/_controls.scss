@@ -1,0 +1,31 @@
+button {
+  height: $button-height;
+  border-width: 0px;
+  border-radius: $button-radius;
+  transition: all $button-transition-duration;
+  font-size: $font-size-med;
+  text-align: center;
+  vertical-align: middle;
+  &.btn-finish {
+    @include even-interior-shadow(white, $shadow-size-sml);
+    width: 25%;
+    margin-right: $med-margin;
+    color: #FFF;
+    background: $transparent-action-green;
+    &:hover {
+      @include even-interior-shadow(0, white);
+      background: $transparent-action-green-hover;
+    }
+  }
+}
+
+.new-todo {
+  @include axis-margin(vertical, $vertical-margin);
+  z-index: 1;
+  input {
+    width: 100%;
+    padding: $lrg-padding;
+    font-size: $font-size-lrg;
+    border: $border-size-sml solid $medium-gray;
+  }
+}

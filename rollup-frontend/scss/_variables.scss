@@ -1,0 +1,64 @@
+@import url("http://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic");
+
+
+//////////
+//FONTS //
+//////////
+$roboto: 'Roboto';
+$font-size-med: 20px;
+$font-size-lrg: 24px;
+$font-size-sml: 12px;
+$font-size-xsml: 10px;
+
+//////////
+//SIZES //
+//////////
+
+//Widths
+$brk-sml: 500px;
+
+//Heights
+$button-height: 40px;
+$min-list-height: 50px;
+
+//Margins
+$vertical-margin: 22px;
+$med-margin: 10px;
+$sml-margin: 5px;
+
+//Paddings
+$content-padding: 10px;
+$lrg-padding: 30px;
+$text-padding: 15px;
+$sml-padding: 5px;
+
+//Borders
+$button-radius: 2px;
+$border-size-sml: 1px;
+
+//Shadows
+$shadow-size-sml: 2px;
+$shadow-size-lrg: 20px;
+
+///////////
+//COLORS //
+///////////
+
+//Colors
+$light-gray: #EBEBEB;
+$medium-gray: #969696;
+
+//Transparent Colors
+$transparent-action-green: rgba(83, 189, 72, .5);
+$transparent-action-green-hover: rgba(83, 189, 72, .8);
+$transparent-white: rgba(255, 255, 255, 0.5);
+
+//Tint Amounts
+$tint-lrg: 55;
+$tint-sml: 30;
+
+///////////
+//TIMING //
+///////////
+$button-transition-duration: .2s;
+$button-animation-duration: .3s;

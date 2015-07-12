@@ -1,0 +1,50 @@
+.todos-list, .completed-list {
+  width: 100%;
+  min-height: $min-list-height;
+  overflow-y: auto;
+  margin-bottom: $vertical-margin;
+  > ol {
+    @include list-reset();
+    > li {
+      @include animation-duration($button-animation-duration);
+      @include axis-padding(vertical, $sml-padding);
+      @include glass($shadow-size-lrg);
+      width: 100%;
+      min-height: 50px;
+      margin-bottom: $med-margin;
+      overflow: hidden;
+      &:last-child {
+        margin-bottom: 0px;
+      }
+      &.completed {
+        @include glass(0px);
+        color: $medium-gray;
+      }
+      > .item-controls {
+        display: inline-block;
+        vertical-align: top;
+        width: 30%;
+        > button {
+          float: right;
+          margin-top: $sml-margin;
+        }
+      }
+      > article {
+        width: 70%;
+        display: inline-block;
+        vertical-align: middle;
+        > p {
+          padding-left: $text-padding;
+          &.completed-date {
+            font-size: $font-size-xsml;
+            color: tint($medium-gray, $tint-lrg);
+            > span {
+              color: tint($medium-gray, $tint-sml);
+              font-size: $font-size-sml;
+            }
+          }
+        }
+      }
+    }
+  }
+}

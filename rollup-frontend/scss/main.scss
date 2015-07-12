@@ -1,0 +1,60 @@
+
+//Import compass utils
+@import "compass/css3/animation";
+@import "compass/css3/filter";
+@import "compass/css3/opacity";
+@import "compass/css3/box-shadow";
+
+//Variables
+@import "variables";
+@import "mixins";
+
+//Partials
+@import "controls";
+@import "todo-list";
+
+
+
+html {
+  height: 100%;
+  font-family: $roboto;
+  background: $light-gray;
+}
+
+#app-1 {
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#content {
+  height: 100%;
+  width: 50%;
+  min-width: $brk-sml;
+  margin: 0 auto 0 auto;
+  padding: $content-padding;
+  > header {
+    @include axis-margin(vertical, $vertical-margin);
+  }
+}
+
+hr {
+  @include axis-margin(vertical, $vertical-margin);
+  border: none;
+  height: $border-size-sml;
+  background: $medium-gray;
+}
+
+.list-section > header {
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+
