@@ -6,6 +6,8 @@
 </article>
 <div class="item-controls">
   {^isDone}
-    <button class="btn-finish">&#10003;</button>
+    <button class="btn-finish mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+      <i class="material-icons">check</i>
+    </button>
   {/isDone}
 </div>

@@ -1,8 +1,11 @@
 define([
     'requireConfig'
-  ], function () {
+  ], 
 
-  require([
+  function () {
+
+    require([
+      'jquery',
       'backbone', 
       'marionette', 
       'helpers/DustFilters', 
@@ -13,6 +16,7 @@ define([
     ],
 
     function (
+      $,
       Backbone, 
       Marionette, 
       Filters, 

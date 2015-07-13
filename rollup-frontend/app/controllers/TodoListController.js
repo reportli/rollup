@@ -61,7 +61,7 @@ define(['backbone',
        * @return {undefined}      undefined
        */
       newTodo: function (text) {
-        console.log(this);
+        
         this.todos.add(new TodoModel({
                                       content: text,
                                       created: new Date().getTime()

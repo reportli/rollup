@@ -16,7 +16,8 @@
     "chai": "~1.7.2",
     "sinon": "~1.7.3",
     "dustjs-linkedin": "~2.7.2",
-    "animate.css": "~3.3.0"
+    "animate.css": "~3.3.0",
+    "material-design-lite": "~1.0.0"
   },
   "devDependencies": {},
   "directory": "bower_components"

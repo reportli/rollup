@@ -5,11 +5,13 @@ module.exports = function (grunt) {
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
+
     banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
       '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
       '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+
     sass: {
       options: {
         compass: true,
@@ -34,17 +36,6 @@ module.exports = function (grunt) {
         dest   : '<%= pkg.directories.tmp %>/<%= pkg.directories.templates %>/compiled_templates.js'
       }
     },
-
-    // requirejs: {
-    //   compile: {
-    //     options: {
-    //       baseUrl       : '<%= pkg.directories.source %>',
-    //       mainConfigFile: '<%= pkg.directories.source %>/config/requireConfig.js',
-    //       name          : 'main',
-    //       out           : "<%= pkg.directories.tmp %>/<%= pkg.directories.frontend %>/rollup.js"
-    //     }
-    //   }
-    // },
 
     jsdoc : {
       cloud : {
@@ -95,6 +86,13 @@ module.exports = function (grunt) {
     },
 
     watch: {
+      frontend: {
+        files: '<%= pkg.directories.frontend %>/**/*',
+        tasks: ['build'],
+        options: {
+          livereload: true
+        }
+      },
       gruntfile: {
         files: '<%= jshint.gruntfile.src %>',
         tasks: ['jshint:gruntfile']
@@ -118,7 +116,7 @@ module.exports = function (grunt) {
     },
 
     copy: {
-      lib: {
+      bower_lib: {
         expand: true,
         cwd   : '<%= pkg.directories.bower %>',
         src   : [
@@ -128,7 +126,17 @@ module.exports = function (grunt) {
                   'underscore/underscore-min.js',
                   'backbone/backbone-min.js',
                   'backbone.marionette/lib/backbone.marionette.min.js',
-                  'animate.css/animate.min.css'
+                  'animate.css/animate.min.css',
+                  'material-design-lite/material.min.css',
+                  'material-design-lite/material.min.js'
+                ],
+        dest  : '<%= pkg.directories.lib %>'
+      },
+      node_lib: {
+        expand: true,
+        cwd   : '<%= pkg.directories.node %>',
+        src   : [
+                  'parse/build/parse-latest.js'
                 ],
         dest  : '<%= pkg.directories.lib %>'
       },
@@ -193,6 +201,6 @@ module.exports = function (grunt) {
 
   // Pipeline commands
   grunt.registerTask('compile', ['sass', 'dustjs', 'clean:temp_src']);
-  grunt.registerTask('build', ['build_clean', 'shell:bower_install', 'copy:lib', 'copy:temp', 'compile', 'copy:dist', 'clean:temp']);
+  grunt.registerTask('build', ['build_clean', 'shell:bower_install', 'copy:bower_lib', 'copy:node_lib', 'copy:temp', 'compile', 'copy:dist', 'clean:temp']);
   grunt.registerTask('deploy', ['build', 'bundle_deploy', 'shell:deploy', 'clean:deploy']);
 };

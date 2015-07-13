@@ -1,12 +1,24 @@
-define(['backbone',
-        'marionette',
-        'views/MainView',
-        'views/TodosView',
-        'views/NewTodoControl',
-        'controllers/TodoListController',
-        'collections/TodosCollection',
-        'collections/helpers/Comparators'],
-  function(Backbone, Marionette, MainView, TodosView, NewTodoControl, TodoListController, TodosCollection, Comparators){
+define([
+  'backbone',
+  'marionette',
+  'views/MainView',
+  'views/TodosView',
+  'views/NewTodoControl',
+  'controllers/TodoListController',
+  'collections/TodosCollection',
+  'collections/helpers/Comparators'
+  ],
+
+  function(
+    Backbone,
+    Marionette,
+    MainView,
+    TodosView,
+    NewTodoControl,
+    TodoListController,
+    TodosCollection,
+    Comparators
+    ){
 
     var activePageController;
 

@@ -18,21 +18,22 @@ define(['backbone', 'marionette'],
      */
     var _ANIMATIONS = {
       //SLIDE
-      SLIDE_IN_LEFT: 'slideInLeft',
-      SLIDE_OUT_LEFT: 'slideOutLeft',
-      SLIDE_IN_RIGHT: 'slideInRight',
+      SLIDE_IN_LEFT  : 'slideInLeft',
+      SLIDE_OUT_LEFT : 'slideOutLeft',
+      SLIDE_IN_RIGHT : 'slideInRight',
       SLIDE_OUT_RIGHT: 'slideOutRight',
       //BOUNCE
-      BOUNCE_IN: 'bounceIn',
-      BOUNCE_OUT: 'bounceOut',
+      BOUNCE_IN      : 'bounceIn',
+      BOUNCE_OUT     : 'bounceOut',
       //FADE
-      FADE_IN: 'fadeIn',
-      FADE_OUT: 'fadeOut',
+      FADE_IN        : 'fadeIn',
+      FADE_OUT       : 'fadeOut',
+      FADE_IN_UP     : 'fadeInUp',
       //ZOOM
-      ZOOM_IN: 'zoomIn',
-      ZOOM_OUT: 'zoomOut',
+      ZOOM_IN        : 'zoomIn',
+      ZOOM_OUT       : 'zoomOut',
       //FLIP
-      FLIP_IN_Y: 'flipInY'
+      FLIP_IN_Y      : 'flipInY'
     };
 
     /**

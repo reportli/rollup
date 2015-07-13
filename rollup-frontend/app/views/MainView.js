@@ -6,7 +6,7 @@ define(['backbone', 'marionette', 'helpers/Animator'],
   function(Backbone, Marionette, Animator){
 
     var _ANIMATIONS = {
-      IN: 'FLIP_IN_Y'
+      IN: 'FADE_IN_UP'
     };
 
     var MainView = Backbone.Marionette.LayoutView.extend({
