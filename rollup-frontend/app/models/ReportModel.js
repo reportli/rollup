@@ -1,13 +1,13 @@
 /**
  * The model for persisting individual todo items
- * @module models/TodoModel
+ * @module models/ReportModel
  */
 define(['backbone'],
   function(Backbone){
-    var Todo = Backbone.Model.extend({
+    var Report = Parse.Object.extend("Status", {
       defaults: {
         isDone: false,
       }
     });
-    return Todo;
+    return Report;
 });

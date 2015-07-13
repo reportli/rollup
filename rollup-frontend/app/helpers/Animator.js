@@ -24,11 +24,14 @@ define(['backbone', 'marionette'],
       SLIDE_OUT_RIGHT: 'slideOutRight',
       //BOUNCE
       BOUNCE_IN      : 'bounceIn',
+      BOUNCE_IN_DOWN : 'bounceInDown',
       BOUNCE_OUT     : 'bounceOut',
+
       //FADE
       FADE_IN        : 'fadeIn',
       FADE_OUT       : 'fadeOut',
       FADE_IN_UP     : 'fadeInUp',
+      FADE_IN_DOWN   : 'fadeInDown',
       //ZOOM
       ZOOM_IN        : 'zoomIn',
       ZOOM_OUT       : 'zoomOut',

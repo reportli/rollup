@@ -1,48 +1,83 @@
 define([
+  'underscore',
   'backbone',
   'marionette',
+  'helpers/SessionManager',
   'views/MainView',
-  'views/TodosView',
-  'views/NewTodoControl',
-  'controllers/TodoListController',
-  'collections/TodosCollection',
-  'collections/helpers/Comparators'
+  'views/itemViews/NavView',
+  'controllers/LoginController'
   ],
 
   function(
+    _,
     Backbone,
     Marionette,
+    SessionManager,
     MainView,
-    TodosView,
-    NewTodoControl,
-    TodoListController,
-    TodosCollection,
-    Comparators
+    NavView,
+    LoginController
     ){
 
     var activePageController;
 
     /**
      * The "Super Controller" - responds to routes and manages sub-controllers
-     * @exports controllers/TodoController
+     * @exports controllers/RollupController
      */
-    var TodoController = {
-      activePageController: {},
+    var RollupController = Marionette.Object.extend({
+      
+      initialize: function(options) {
+
+        this.sessionManager = new SessionManager();
+
+        this.view = new MainView({ el: "#app" });
+        this.view.render();
+      },
+
+      showNavigation: function () {
+        
+        var navRegion = this.view.getRegion('nav');
+
+        if(_.isUndefined(navRegion.currentView)) {
+
+          this.view.getRegion('nav').show(new NavView());
+        }
+      },
+
+      hideNavigation: function() {
+
+        this.view.getRegion('nav').empty();
+      },
+
+      login: function() {
+
+        this.hideNavigation();
+        this.setActivePageController(LoginController, {
+          parentView: this.view
+        });
+      },
+
       /**
        * Handles the "home" route, setting up the appropriate views and collections
        * @return {undefined} [undefined]
        */
-      home: function() {
-        //Initialize instances & connect references
-        this.setActivePageController(TodoListController);
+      feed: function() {
+
+        this.showNavigation();
       },
 
       /**
        * Handles the "archive" route
        * @return {undefined} undefined
        */
-      archive: function() {
-        console.log("We're in the archive!");
+      teams: function() {
+
+        this.showNavigation();
+      },
+
+      report: function() {
+
+        this.showNavigation();
       },
 
       /**
@@ -53,6 +88,10 @@ define([
        */
       setActivePageController: function (ControllerClass, options) {
         options = options || {};
+
+        if(!this.sessionManager.isLoggedIn()) {
+          console.log('not logged in');
+        }
 
         //If the active page controller is an instance of
         //the ControllerClass we're trying to instantiate
@@ -70,7 +109,7 @@ define([
 
         activePageController = new ControllerClass(options);
       }
-    };
+    });
 
-    return TodoController;
+    return RollupController;
 });

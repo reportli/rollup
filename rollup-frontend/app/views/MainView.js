@@ -22,15 +22,10 @@ define(['backbone', 'marionette', 'helpers/Animator'],
          * @type {Object}
          */
         regions: {
-          newTodo: '.new-todo',
-          todos: '.todos-list',
-          completed: '.completed-list'
-        },
-
-        initialize: function() {
-          Animator.animate(this.el, Animator.animation(_ANIMATIONS.IN));
+          nav: '#nav',
+          content: '#content',
+          footer: '#footer'
         }
-
       });
 
     return MainView;

@@ -9,8 +9,8 @@ define([
       'backbone', 
       'marionette', 
       'helpers/DustFilters', 
-      'routers/TodoRouter', 
-      'controllers/TodoController',
+      'routers/RollupRouter', 
+      'controllers/RollupController',
       'dust',
       'templates'
     ],
@@ -20,11 +20,10 @@ define([
       Backbone, 
       Marionette, 
       Filters, 
-      TodoRouter, 
-      TodoController
+      RollupRouter, 
+      RollupController
       ) {
-      var app = new Marionette.Application(),
-          todoRouter = new TodoRouter({controller: TodoController});
+      var app = new Marionette.Application();
 
       //Add initializer that will execute immediately
       //before app start
@@ -46,7 +45,7 @@ define([
         }
 
         //Create application router
-        app.router = todoRouter;
+        app.router = new RollupRouter({controller: new RollupController()});
 
         //Start backbone history immediately after application start.
         //This step is important - the router wont work without it!

@@ -142,7 +142,7 @@ module.exports = function (grunt) {
       },
       temp: {
         expand: true,
-        src   : ['<%= pkg.directories.frontend %>/**', '<%= pkg.directories.backend %>/**'],
+        src   : ['<%= pkg.directories.frontend %>/**/*', '<%= pkg.directories.backend %>/**'],
         dest  : '<%= pkg.directories.tmp %>'
       },
       dist: {
