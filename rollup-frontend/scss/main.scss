@@ -31,7 +31,6 @@ html {
   width: 100%;
   min-width: $brk-sml;
   margin: 0 auto 0 auto;
-  padding: $content-padding;
   > header {
     @include axis-margin(vertical, $vertical-margin);
   }
@@ -48,6 +47,10 @@ hr {
   display: none;
 }
 
+.content {
+  background: rgba(100,100,100, .5);
+  min-height: 350px;
+}
 
 
 

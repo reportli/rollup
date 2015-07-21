@@ -33,6 +33,7 @@ define([
         //and replace with mighty Dust!
         Backbone.Marionette.Renderer.render = function (template, data) {
           var html;
+          
           dust.render(template, data, function (err, out) {
             html = out;
           });
