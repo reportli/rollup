@@ -25,6 +25,11 @@ define([
             this.mergeOptions(options, this.mergedOptions);
           },
 
+          className: function() {
+
+            return this.getOption('mdlClass');
+          },
+
           onBeforeShow: function() {
 
             var self = this,

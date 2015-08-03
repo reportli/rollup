@@ -48,10 +48,17 @@ hr {
 }
 
 .content {
-  background: rgba(100,100,100, .5);
+  // background: rgba(100,100,100, .5);
   min-height: 350px;
 }
 
+.welcome {
+  >.mdl-card__title {
+    color : white;
+    height: 176px;
+    background: url('https://placekitten.com/g/600/300') center / cover;
+  }
+}
 
 
 

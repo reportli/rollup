@@ -19,8 +19,41 @@ define([
     var _components = {
       GRID: {
         tagName  : 'section',
-        className: 'mdl-grid',
+        mdlClass : 'mdl-grid',
         template : 'mdlGrid'
+      },
+
+      BUTTON: {
+        tagName : 'button',
+        mdlClass: 'mdl-button mdl-js-button',
+        template: 'mdlButton',
+        options : {
+                    ripple : 'mdl-js-ripple-effect',
+                    colored: 'mdl-button--colored',
+                    accent : 'mdl-button--accent',
+                    primary: 'mdl-button--primary' 
+                  }, 
+        types   : {
+                    FAB     : {
+                                className: 'mdl-button--fab'
+                              },
+                    MINI_FAB: {
+                                className: 'mdl-button--fab mdl-button--mini-fab'
+                              },
+                    RAISED  : {
+                                className: 'mdl-button--raised'
+                              },
+                    FLAT    : {}
+                  }
+      },
+      CARD: {
+        tagName : 'div',
+        template: 'mdlCard',
+        mdlClass: 'mdl-card mdl-shadow--2dp',
+        options : {}
+      },
+      WORDS: {
+        template: 'mdlWords'
       }
     },
 

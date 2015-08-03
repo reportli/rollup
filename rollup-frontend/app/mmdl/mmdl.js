@@ -7,13 +7,19 @@
 define([
   'backbone',
   'marionette',
-  'mmdl/viewFactories/MMDLLayoutFactory'
+  'mmdl/viewFactories/MMDLLayoutFactory',
+  'mmdl/viewFactories/MMDLButtonFactory',
+  'mmdl/viewFactories/MMDLCardFactory',
+  'mmdl/viewFactories/MMDLWordsFactory'
   ],
 
   function(
     Backbone,
     Marionette,
-    MMDLLayoutFactory
+    MMDLLayoutFactory,
+    MMDLButtonFactory,
+    MMDLCardFactory,
+    MMDLWordsFactory
     ) {
 
     MMDL = Backbone.Marionette.Object.extend({
@@ -21,11 +27,29 @@ define([
       initialize: function(options) {
         
         this.layoutFactory = new MMDLLayoutFactory();
+        this.buttonFactory = new MMDLButtonFactory();
+        this.cardFactory   = new MMDLCardFactory();
+        this.wordsFactory  = new MMDLWordsFactory();
       },
 
       getMMDLLayout: function(options) {
 
         return this.layoutFactory.buildLayout(options);
+      },
+
+      button: function(options) {
+
+        return this.buttonFactory.buildButton(options);
+      },
+
+      card: function(options) {
+
+        return this.cardFactory.buildCard(options);
+      },
+
+      words: function(options) {
+        
+        return this.wordsFactory.buildWords(options);
       }
     });
 

@@ -38,7 +38,7 @@ define([
             regionConfigs = _.extend({}, regions);
 
         for(var region in regions) {
-console.log(regionConfigs[region]);
+
           regionConfigs[region].className = self.buildLayoutClass(regionConfigs[region].className, regionConfigs[region].columns);
           regionConfigs[region].tagName = MMDLGlossary.getComponentConfig('GRID').tagName;
 

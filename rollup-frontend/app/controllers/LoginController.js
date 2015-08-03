@@ -3,7 +3,8 @@ define([
   'backbone',
   'marionette',
   'mmdl/mmdl',
-  'mmdl/views/MMDLLayout'
+  'mmdl/views/MMDLLayout',
+  'mmdl/views/MMDLButton'
   ],
 
   function(
@@ -11,7 +12,8 @@ define([
     Backbone,
     Marionette,
     MMDL,
-    MMDLLayout
+    MMDLLayout,
+    MMDLButton
     ) {
 
     var LoginController = Backbone.Marionette.Object.extend({
@@ -23,11 +25,11 @@ define([
         this.view = MMDL.getMMDLLayout({
           regions: {
             loginContent: {
-              columns: 6,
+              columns  : 6,
               className: 'content login'
             },
             mainContent: {
-              columns: 6,
+              columns  : 6,
               className: 'content main'
             }
            },
@@ -36,11 +38,11 @@ define([
               region: 'mainContent',
               regions: {
                 username: {
-                  columns: 8,
+                  columns  : 8,
                   className: 'content login'
                 },
                 password: {
-                  columns: 2,
+                  columns  : 2,
                   className: 'content main'
                 }
               },
@@ -49,22 +51,72 @@ define([
                     region: 'username',
                     regions: {
                       username: {
-                        columns: 4,
+                        columns  : 4,
                         className: 'content login'
                       },
                       password: {
-                        columns: 3,
+                        columns  : 3,
                         className: 'content main'
                       },
                       address: {
-                        columns: 3,
+                        columns  : 3,
                         className: 'content main'
                       }
                     },
                     childViews: [
-                      new Backbone.Marionette.ItemView({
-                        region: 'address',
-                        template: 'Nav'
+                      MMDL.button({
+                        region  : 'address',
+                        icon    : 'add',
+                        ripple  : true,
+                        type    : 'FAB',
+                        colored : 'colored'
+                      }),
+                      MMDL.card({
+                        region        : 'username',
+                        name          : 'welcome',
+                        title         : MMDL.words({
+                                          tagName: 'div',
+                                          words  : 'Hello San Francisco!'
+                                        }),
+                        supportingText: MMDL.words({
+                                          tagName: 'div',
+                                          words  : 'Yolo swag 247'
+                                        }),
+                        cardActions   : MMDL.getMMDLLayout({
+                                          regions: {
+                                            getStarted: {
+                                              columns: 6,
+                                              className: 'get-started'
+                                            },
+                                            signUp: {
+                                              columns: 4,
+                                              className: 'sign-up'
+                                            }
+                                          },
+                                          childViews: [
+                                            MMDL.button({
+                                              region : 'getStarted',
+                                              text   : 'account_balance',
+                                              type   : 'RAISED',
+                                              colored: 'primary',
+                                              ripple : true
+                                            }),
+                                            MMDL.button({
+                                              region : 'signUp',
+                                              icon   : 'account_balance',
+                                              type   : 'RAISED',
+                                              colored: 'primary',
+                                              ripple : true
+                                            })
+                                          ]
+                                        })
+                      }),
+                      MMDL.button({
+                        region  : 'password',
+                        text    : 'SUBMIT',
+                        ripple  : true,
+                        type    : 'RAISED',
+                        colored : 'accent'
                       })
                     ]
                   })
